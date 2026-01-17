@@ -1,0 +1,10 @@
+{
+  "instanceName": "MOREnet Lab",
+  "cacheBuster": true,
+  "bundleUrl": "https://MOREnet-Canvas.github.io/LoaderWithRemoteConfig/dist/app.js",
+
+  "ENABLE_STUDENT_GRADE_CUSTOMIZATION": true,
+  "AVG_OUTCOME_NAME": "Current Score",
+  "AVG_ASSIGNMENT_NAME": "Current Score Assignment",
+  "AVG_RUBRIC_NAME": "Current Score Rubric"
+}
