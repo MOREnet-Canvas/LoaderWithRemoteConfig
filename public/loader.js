@@ -5,7 +5,7 @@
 
     const host = location.hostname;
 
-    // ✅ CHANGE THIS to your GitHub Pages base
+
     const GH_PAGES_BASE = "https://MOREnet-Canvas.github.io/LoaderWithRemoteConfig";
 
     // Config file per domain
