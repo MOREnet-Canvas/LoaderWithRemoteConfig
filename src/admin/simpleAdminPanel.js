@@ -1,6 +1,13 @@
 export function mountAdminPanel() {
     if (!/\/accounts\/\d+\/theme_editor/.test(location.pathname)) return;
 
+    // Inject the link at the bottom of the Upload Overrides form
+    injectCustomLoaderConfigLink({
+        // Prefer config-driven URL, with a safe fallback
+        url: window.CG_CONFIG?.adminConfigUrl || "https://your-domain.example/custom-loader-config",
+        text: "Custom Loader Config",
+    });
+
     const panel = document.createElement("div");
     panel.style.cssText = `
     position: fixed;
@@ -58,4 +65,50 @@ export function mountAdminPanel() {
     };
 
     document.body.appendChild(panel);
+}
+
+/**
+ * Adds a link at the bottom of:
+ *   .Theme__editor-upload-overrides_form
+ */
+function injectCustomLoaderConfigLink({ url, text }) {
+    const FORM_SELECTOR = ".Theme__editor-upload-overrides_form";
+    const DATA_KEY = "cgCustomLoaderConfigLinkInjected";
+
+    const tryInject = () => {
+        const form = document.querySelector(FORM_SELECTOR);
+        if (!form) return false;
+        if (form.dataset[DATA_KEY] === "true") return true;
+
+        const wrap = document.createElement("div");
+        wrap.style.marginTop = "12px";
+        wrap.style.paddingTop = "12px";
+        wrap.style.borderTop = "1px solid rgba(0,0,0,0.1)";
+        wrap.style.display = "flex";
+        wrap.style.justifyContent = "flex-end";
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = text;
+
+        // Looks like Canvas' existing "View File" link style
+        link.className = "ThemeEditorFileUpload__view-file";
+
+        wrap.appendChild(link);
+        form.appendChild(wrap);
+
+        form.dataset[DATA_KEY] = "true";
+        return true;
+    };
+
+    if (tryInject()) return;
+
+    const obs = new MutationObserver(() => {
+        if (tryInject()) obs.disconnect();
+    });
+
+    obs.observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(() => obs.disconnect(), 30000);
 }
