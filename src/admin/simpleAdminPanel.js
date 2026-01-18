@@ -1,4 +1,4 @@
-function injectCustomLoaderConfigLinkPersistent({ url, text }) {
+export function injectCustomLoaderConfigLinkPersistent({ url, text }) {
     const FORM_SELECTOR = ".Theme__editor-upload-overrides_form";
     const WRAP_ID = "cg-custom-loader-config-wrap"; // stable id inside the form
 
@@ -37,4 +37,13 @@ function injectCustomLoaderConfigLinkPersistent({ url, text }) {
 
     // (Optional) expose a stopper if you ever need it
     window.__cgStopConfigLinkObserver = () => obs.disconnect();
+}
+
+export function mountAdminPanel() {
+    const host = location.hostname;
+    const GH_PAGES_BASE = "https://MOREnet-Canvas.github.io/LoaderWithRemoteConfig";
+    const url = `${GH_PAGES_BASE}/config/${host}.json`;
+    const text = "View loader config";
+
+    injectCustomLoaderConfigLinkPersistent({ url, text });
 }
